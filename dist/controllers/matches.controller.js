@@ -1,5 +1,5 @@
-import User from "../models/user.model";
-import { getConnectedUsers, getIO } from "../socket/socket";
+import User from "../models/user.model.js";
+import { getConnectedUsers, getIO } from "../socket/socket.js";
 // Swipe Right
 export const swipeRight = async (req, res) => {
     try {

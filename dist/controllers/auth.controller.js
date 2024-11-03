@@ -1,8 +1,8 @@
 import { ZodError } from "zod";
-import { loginSchema, registerSchema } from "../validation/user.validation";
-import authServices from "../services/auth.services";
-import { generateJWTToken } from "../configs/generateJwtToken";
-import User from "../models/user.model";
+import { loginSchema, registerSchema } from "../validation/user.validation.js";
+import authServices from "../services/auth.services.js";
+import { generateJWTToken } from "../configs/generateJwtToken.js";
+import User from "../models/user.model.js";
 // Register User
 export const registerUser = async (req, res) => {
     try {

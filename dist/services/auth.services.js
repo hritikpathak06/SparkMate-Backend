@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 class AuthService {
     async createUser(data) {
         const newUser = new User({

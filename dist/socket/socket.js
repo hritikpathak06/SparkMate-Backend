@@ -1,10 +1,12 @@
 import { Server } from "socket.io";
+import dotenv from "dotenv";
+dotenv.config();
 let io;
 const connectedUser = new Map();
 export const InitializeSocket = (httpServer) => {
     io = new Server(httpServer, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: process.env.CLIENT_BASE_URL,
             credentials: true,
         },
     });

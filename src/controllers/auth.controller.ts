@@ -93,6 +93,9 @@ export const loginUser = async (req: any, res: any) => {
     }
     return res.status(500).json({
       success: false,
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
       msg: error.message,
     });
   }

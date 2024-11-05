@@ -41,42 +41,46 @@ export const InitializeSocket = (httpServer: any) => {
       const receiverSocketId = connectedUser.get(receiverId);
 
       if (receiverSocketId) {
-        console.log(`Sending offer to receiver: ${receiverId}`);
         io?.to(receiverSocketId).emit("offer", { offer, senderId });
+        io?.to(receiverSocketId).emit("incomingCall", { senderId });
       } else {
-        console.log(`Receiver ${receiverId} not connected`);
         socket.emit("callFailed", { reason: "Receiver is not online" });
       }
     });
 
-    // Handle incoming answer
     socket.on("answer", (data) => {
       const { answer, receiverId, senderId } = data;
-      const receiverSocketId = connectedUser.get(receiverId);
+      const senderSocketId = connectedUser.get(senderId);
 
-      if (receiverSocketId) {
-        console.log(`Sending answer to caller: ${receiverId}`);
-        io?.to(receiverSocketId).emit("answer", answer);
+      if (senderSocketId) {
+        io?.to(senderSocketId).emit("answer", { answer });
       }
     });
 
-    // Handle incoming ICE candidate
     socket.on("candidate", (data) => {
-      const { candidate, receiverId } = data;
-      const receiverSocketId = connectedUser.get(receiverId);
+      const { candidate, receiverId, senderId } = data;
+      const targetSocketId = connectedUser.get(receiverId);
 
-      if (receiverSocketId) {
-        io?.to(receiverSocketId).emit("candidate", { candidate });
+      if (targetSocketId) {
+        io?.to(targetSocketId).emit("candidate", { candidate });
       }
     });
 
-    // Handle call ending
     socket.on("endCall", (data) => {
       const { receiverId } = data;
       const receiverSocketId = connectedUser.get(receiverId);
 
       if (receiverSocketId) {
         io?.to(receiverSocketId).emit("callEnded");
+      }
+    });
+
+    socket.on("callRejected", (data) => {
+      const { senderId } = data;
+      const senderSocketId = connectedUser.get(senderId);
+
+      if (senderSocketId) {
+        io?.to(senderSocketId).emit("callFailed", { reason: "Call rejected" });
       }
     });
 

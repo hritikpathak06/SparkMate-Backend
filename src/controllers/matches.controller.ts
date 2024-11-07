@@ -130,6 +130,31 @@ export const getMatches = async (req: any, res: any) => {
   }
 };
 
+export const getUserMatches = async (req: any, res: any) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId)
+      .populate("matches")
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        msg: "No User Found Associated with this id",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "Fetched User Matches",
+      matches: user.matches,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      msg: error.message,
+    });
+  }
+};
+
 // get all profiles
 export const getUserProfiles = async (req: any, res: any) => {
   try {

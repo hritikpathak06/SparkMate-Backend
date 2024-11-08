@@ -42,7 +42,7 @@ export const updateUserProfile = async (req, res) => {
 export const getUserProfile = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("matches");
         return res.status(200).json({
             success: true,
             user,
